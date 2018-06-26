@@ -36,6 +36,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
@@ -61,7 +62,7 @@ public class Main extends Application
 
 	//....................................-------------------------------------------------------------------------
 
-
+	String sciezka = "D:\\Image\\"; // sztywna poczatkowa
 	@Override
     public void start(Stage primaryStage) throws IOException
 	{
@@ -75,7 +76,7 @@ public class Main extends Application
         listView.setLayoutX(10);
         listView.setLayoutY(10);
 
-        File file = new File("D:\\Image\\");
+        File file = new File(sciezka);
 
 		// check if the specified pathname is directory first
 		if(file.isDirectory())
@@ -108,6 +109,7 @@ public class Main extends Application
 
 
         final FileChooser fileChooser = new FileChooser();
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
 
         final Button openButton = new Button("Wyœwietl Obraz");
   		openButton.setLayoutX(230);
@@ -133,9 +135,9 @@ public class Main extends Application
         otworz0.setLayoutX(840);
         otworz0.setLayoutY(50);
 
-        final Button otworz1 = new Button("Podaj!");
+        final Button otworz1 = new Button("Wczytaj nowe zdjecie!");
         otworz1.setLayoutX(840);
-        otworz1.setLayoutY(100);
+        otworz1.setLayoutY(200);
 
 
         Label path0 = new Label("Sciezka do katalogu:");
@@ -180,6 +182,7 @@ public class Main extends Application
         		@Override
         		public void handle(final ActionEvent e)
         		{
+
         			 try
         			 {
 						openNewImageWindow(file,primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
@@ -188,24 +191,119 @@ public class Main extends Application
         			 {
 						e1.printStackTrace();
         			 }
+        		     textField1.setText((String)data.get(listView.getSelectionModel().getSelectedIndex()));
+
         		}
         	});
-
-/*            new EventHandler<ActionEvent>() {
+        otworz0.setOnAction(
+          new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(final ActionEvent e) {
-                    setExtFilters(fileChooser);
-                    File file = fileChooser.showOpenDialog(primaryStage);
-                    if (file != null) {
+
+                    File file2 = directoryChooser.showDialog(primaryStage);
+                    System.out.println(file2);
+                    try {
+						sciezka=file2.getCanonicalPath();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                    File file21 = new File(sciezka);
+                    datanames.removeAll(datanames);
+                    data.removeAll(data);
+            		// check if the specified pathname is directory first
+            		if(file21.isDirectory())
+            		{
+            			//list all files on directory
+            			File[] files = file21.listFiles();
+            			for(File f:files)
+            			{
+            				try
+            				{
+            					System.out.println(f.getCanonicalPath());
+            				}
+            				catch(IOException e1)
+            				{
+            					e1.printStackTrace();
+            				}
+            			}
+            		}
+            		File[] files = file21.listFiles();
+                    for (File f:files)
+                    {
                         try {
-							openNewImageWindow(file,primaryStage,openButton,listView);
-						} catch (FileNotFoundException e1) {
+							data.add(f.getCanonicalPath());
+						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-						} ///............
+						}
+                        datanames.add(f.getName());
+                    }
+                    textField0.setText(sciezka);
+
+                    listView.setItems(datanames);
+                    label.setText(list.getSelectionModel().getSelectedItem());
+                    System.out.println((String)data.get(listView.getSelectionModel().getSelectedIndex()));
+                    System.out.println(2);
+
                     }
                 }
-            }); */
+            );
+
+        nowykatalog.setOnAction(
+        		new EventHandler<ActionEvent>(){
+        			@Override
+                    public void handle(final ActionEvent e) {
+        			// YOUR CODE HERE KAMIL
+        		}
+        		}
+
+        		);
+
+        usun.setOnAction(
+        		new EventHandler<ActionEvent>(){
+        			@Override
+                    public void handle(final ActionEvent e) {
+        			// YOUR CODE HERE KAMIL
+        		}
+        		}
+
+        		);
+
+        kopiuj.setOnAction(
+        		new EventHandler<ActionEvent>(){
+        			@Override
+                    public void handle(final ActionEvent e) {
+        			// YOUR CODE HERE KAMIL
+        		}
+        		}
+
+        		);
+
+        wytnij.setOnAction(
+        		new EventHandler<ActionEvent>(){
+        			@Override
+                    public void handle(final ActionEvent e) {
+        			// YOUR CODE HERE KAMIL
+        		}
+        		}
+
+        		);
+        otworz1.setOnAction(
+        		new EventHandler<ActionEvent>(){
+        			@Override
+                    public void handle(final ActionEvent e) {
+        			// YOUR CODE HERE KAMIL
+        		}
+        		}
+
+        		);
+
+
+
+
+
+
         primaryStage.setTitle("JavaImageDisplayer");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -225,6 +323,12 @@ public class Main extends Application
 
 	//....................................-------------------------------------------------------------------------
 
+    private void setDirectoryChooser(DirectoryChooser chooser)
+    {
+
+
+    }
+
 
     private void setExtFilters(FileChooser chooser)
     {
@@ -243,48 +347,6 @@ public class Main extends Application
     		HBox hb0, HBox hb1) throws FileNotFoundException
     {
         Stage secondStage = new Stage();
-        /*
-        MenuBar menuBar = new MenuBar();
-        Menu menuFile = new Menu("File");
-        MenuItem menuItem_Save = new MenuItem("Save Image");
-        menuFile.getItems().addAll(menuItem_Save);
-        menuBar.getMenus().addAll(menuFile);
-
-        Label name = new Label(file.getAbsolutePath());
-        Image image = new Image(file.toURI().toString());
-       	*/
-        //ImageView imageView = new ImageView();
-
-        /*
-        menuItem_Save.setOnAction(new EventHandler<ActionEvent>() {
-
-
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Save Image");
-
-                File file = fileChooser.showSaveDialog(secondStage);
-                if (file != null) {
-                    try {
-                        ImageIO.write(SwingFXUtils.fromFXImage(imageView.getImage(),
-                                null), "png", file);
-                    } catch (IOException ex) {
-                        Logger.getLogger(
-                            Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });*/
-
-
-        //final VBox vbox = new VBox();
-        //vbox.setAlignment(Pos.CENTER);
-        //vbox.setSpacing(10);
-        //vbox.setPadding(new Insets(0, 10, 0, 10));
-        //vbox.getChildren().addAll(name, imageView);
-
-
         System.out.println(data.get(listView.getSelectionModel().getSelectedIndex()));
         Image image = new Image(new FileInputStream((String) data.get(listView.getSelectionModel().getSelectedIndex())));
 		ImageView imageView = new ImageView(image);
@@ -327,6 +389,16 @@ public class Main extends Application
         dodajtag.setLayoutX(10);
         dodajtag.setLayoutY(700);
 
+
+        dodajtag.setOnAction(
+        		new EventHandler<ActionEvent>(){
+        			@Override
+                    public void handle(final ActionEvent e) {
+        			// YOUR CODE HERE PIOTREK
+        		}
+        		}
+
+        		);
 
 
 
