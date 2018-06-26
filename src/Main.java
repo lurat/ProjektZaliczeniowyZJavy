@@ -1,3 +1,4 @@
+package application;
 import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -50,19 +51,19 @@ import com.drew.metadata.Tag;
 //....................................-------------------------------------------------------------------------
 
 
-public class Main extends Application 
-{	
+public class Main extends Application
+{
 	ListView<String> list = new ListView<String>();
 	final Label label = new Label();
 	public static final ObservableList names = FXCollections.observableArrayList();
 	public static final ObservableList data = FXCollections.observableArrayList();
-	
-	
+	public static final ObservableList datanames = FXCollections.observableArrayList();
+
 	//....................................-------------------------------------------------------------------------
-	
-	
+
+
 	@Override
-    public void start(Stage primaryStage) throws IOException 
+    public void start(Stage primaryStage) throws IOException
 	{
     	list.setItems(data);
     	label.setLayoutX(500);
@@ -73,8 +74,8 @@ public class Main extends Application
         listView.setEditable(true);
         listView.setLayoutX(10);
         listView.setLayoutY(10);
-        
-        File file = new File("D:\\£ukasz\\Programowanie\\Eclipse\\Image2\\Katalogi\\katalog3\\");
+
+        File file = new File("D:\\Image\\");
 
 		// check if the specified pathname is directory first
 		if(file.isDirectory())
@@ -83,59 +84,60 @@ public class Main extends Application
 			File[] files = file.listFiles();
 			for(File f:files)
 			{
-				try 
+				try
 				{
 					System.out.println(f.getCanonicalPath());
-				} 
-				catch(IOException e) 
+				}
+				catch(IOException e)
 				{
 					e.printStackTrace();
 				}
 			}
 		}
 		File[] files = file.listFiles();
-        for (File f:files) 
+        for (File f:files)
         {
             data.add(f.getCanonicalPath());
+            datanames.add(f.getName());
         }
 
-        listView.setItems(data);
+        listView.setItems(datanames);
         label.setText(list.getSelectionModel().getSelectedItem());
         System.out.println(listView.getSelectionModel().getSelectedIndex());
         System.out.println(2);
 
 
         final FileChooser fileChooser = new FileChooser();
-        
+
         final Button openButton = new Button("Wyœwietl Obraz");
   		openButton.setLayoutX(230);
   		openButton.setLayoutY(236);
-        
+
         final Button nowykatalog = new Button("Utwórz katalog");
         nowykatalog.setLayoutX(230);
         nowykatalog.setLayoutY(200);
-  		
+
         final Button usun = new Button("Usuñ");
         usun.setLayoutX(230);
         usun.setLayoutY(164);
-  		
+
         final Button kopiuj = new Button("Kopiuj");
         kopiuj.setLayoutX(230);
         kopiuj.setLayoutY(126);
-  		
+
         final Button wytnij = new Button("Wytnij");
         wytnij.setLayoutX(230);
         wytnij.setLayoutY(92);
-        
+
         final Button otworz0 = new Button("Podaj!");
         otworz0.setLayoutX(840);
         otworz0.setLayoutY(50);
-        
+
         final Button otworz1 = new Button("Podaj!");
         otworz1.setLayoutX(840);
         otworz1.setLayoutY(100);
-        
-        
+
+
         Label path0 = new Label("Sciezka do katalogu:");
         path0.setTextFill(Color.WHITE);
         TextField textField0 = new TextField ();
@@ -146,8 +148,8 @@ public class Main extends Application
         hb0.setSpacing(10);
         hb0.setLayoutX(400);
         hb0.setLayoutY(50);
-        
-        
+
+
         Label path1 = new Label("Sciezka do zdjecia:   ");
         path1.setTextFill(Color.WHITE);
         TextField textField1 = new TextField ();
@@ -159,7 +161,7 @@ public class Main extends Application
         hb1.setLayoutX(400);
         hb1.setLayoutY(100);
 
-        
+
 
       		Group root = new Group(listView, openButton, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1, label);
       		Scene scene = new Scene(root,1000,750,Color.DIMGREY);
@@ -167,28 +169,28 @@ public class Main extends Application
               //StackPane root = new StackPane();
               //root.getChildren().addAll(openButton, listView);
 
-      		
-            
+
+
               //Scene scene = new Scene(root, 400, 150);
-      	
+
 
         openButton.setOnAction(
-        	new EventHandler<ActionEvent>() 
+        	new EventHandler<ActionEvent>()
         	{
         		@Override
-        		public void handle(final ActionEvent e) 
+        		public void handle(final ActionEvent e)
         		{
         			 try
         			 {
 						openNewImageWindow(file,primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
-        			 } 
-        			 catch(FileNotFoundException e1) 
+        			 }
+        			 catch(FileNotFoundException e1)
         			 {
 						e1.printStackTrace();
         			 }
         		}
         	});
-        	
+
 /*            new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(final ActionEvent e) {
@@ -211,19 +213,19 @@ public class Main extends Application
     }
 
 
-	
-	//....................................-------------------------------------------------------------------------
-	
 
-    public static void main(String[] args) 
+	//....................................-------------------------------------------------------------------------
+
+
+    public static void main(String[] args)
     {
         launch(args);
     }
 
-    
+
 	//....................................-------------------------------------------------------------------------
-    
-    
+
+
     private void setExtFilters(FileChooser chooser)
     {
         chooser.getExtensionFilters().addAll(
@@ -231,12 +233,12 @@ public class Main extends Application
                 new FileChooser.ExtensionFilter("PNG", "*.png")
         );
     }
-    
-    
-	//....................................-------------------------------------------------------------------------
-    
 
-    private void openNewImageWindow(File file, Stage primaryStage,Button openButton, ListView listView, 
+
+	//....................................-------------------------------------------------------------------------
+
+
+    private void openNewImageWindow(File file, Stage primaryStage,Button openButton, ListView listView,
     		Button nowykatalog, Button usun, Button kopiuj, Button wytnij, Button otworz0, Button otworz1,
     		HBox hb0, HBox hb1) throws FileNotFoundException
     {
@@ -247,7 +249,7 @@ public class Main extends Application
         MenuItem menuItem_Save = new MenuItem("Save Image");
         menuFile.getItems().addAll(menuItem_Save);
         menuBar.getMenus().addAll(menuFile);
-       
+
         Label name = new Label(file.getAbsolutePath());
         Image image = new Image(file.toURI().toString());
        	*/
@@ -255,7 +257,7 @@ public class Main extends Application
 
         /*
         menuItem_Save.setOnAction(new EventHandler<ActionEvent>() {
-         
+
 
             @Override
             public void handle(ActionEvent event) {
@@ -275,32 +277,32 @@ public class Main extends Application
             }
         });*/
 
-        
+
         //final VBox vbox = new VBox();
         //vbox.setAlignment(Pos.CENTER);
         //vbox.setSpacing(10);
         //vbox.setPadding(new Insets(0, 10, 0, 10));
         //vbox.getChildren().addAll(name, imageView);
-        
-        
+
+
         System.out.println(data.get(listView.getSelectionModel().getSelectedIndex()));
         Image image = new Image(new FileInputStream((String) data.get(listView.getSelectionModel().getSelectedIndex())));
 		ImageView imageView = new ImageView(image);
-		
+
 		String tags ="";
-		
+
 		//String source = "D:\\£ukasz\\Programowanie\\Eclipse\\Image2\\Katalogi\\katalog3\\5stp";
-		
+
 		File fi = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
 
 		tags = Metadane.pobierz_metadane(fi);
-        
+
 		TextArea metadane = new TextArea(tags);
 		metadane.setLayoutX(10);
 		metadane.setLayoutY(300);
 		metadane.setEditable(false);
-		
-		
+
+
 		Label tagnazwa = new Label("Podaj nazwe Tagu , który chcesz dodac do metadanych zdjecia:   ");
         tagnazwa.setTextFill(Color.WHITE);
         TextField textFieldtagnazwa = new TextField ();
@@ -310,7 +312,7 @@ public class Main extends Application
         vbtagnazwa.setSpacing(10);
         vbtagnazwa.setLayoutX(10);
         vbtagnazwa.setLayoutY(500);
-        
+
 		Label tagtresc = new Label("Podaj treœc Tagu , który chcesz dodac do metadanych zdjecia:   ");
 		tagtresc.setTextFill(Color.WHITE);
         TextField textFieldtagtresc = new TextField ();
@@ -320,14 +322,14 @@ public class Main extends Application
         vbtagtresc.setSpacing(10);
         vbtagtresc.setLayoutX(10);
         vbtagtresc.setLayoutY(600);
-        
+
         Button dodajtag = new Button("Dodaj Tag do metadanych");
         dodajtag.setLayoutX(10);
-        dodajtag.setLayoutY(700);        
-      
-        
-     
-		
+        dodajtag.setLayoutY(700);
+
+
+
+
 		/*
 		String source = (String) data.get(listView.getSelectionModel().getSelectedIndex());
 		InputStream is = new ByteArrayInputStream(source.getBytes(Charset.forName("UTF-8")));
@@ -338,9 +340,9 @@ public class Main extends Application
 		        System.out.println(tag);
 		    }
 		}
-		
+
 		*/
-		
+
         imageView.setFitHeight(400);
         imageView.setPreserveRatio(true);
         imageView.setImage(image);
