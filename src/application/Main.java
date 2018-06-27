@@ -1,11 +1,13 @@
 package application;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +65,15 @@ public class Main extends Application
 	public static final ObservableList datanames = FXCollections.observableArrayList();
 
 	//....................................-------------------------------------------------------------------------
+	// PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
 
+	String sciezka_jako_nazwa_pliku;
+	String temp_nazwa;
+	String temp_nazwa_txt;
+	final String[] tags = {""};
+	TextArea metadane = new TextArea(tags[0]);
+
+	// PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
 	String sciezka = "C:\\Javaproj\\"; // sztywna poczatkowa
 	@Override
     public void start(Stage primaryStage) throws IOException
@@ -138,8 +148,8 @@ public class Main extends Application
         otworz0.setLayoutY(50);
 
         final Button otworz1 = new Button("Wczytaj nowe zdjecie!");
-        otworz1.setLayoutX(840);
-        otworz1.setLayoutY(200);
+        otworz1.setLayoutX(520);
+        otworz1.setLayoutY(150);
 
 
         Label path0 = new Label("Sciezka do katalogu:");
@@ -195,6 +205,34 @@ public class Main extends Application
         			 }
         		     textField1.setText((String)data.get(listView.getSelectionModel().getSelectedIndex()));
 
+        		     // PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
+
+        		     temp_nazwa = (String)data.get(listView.getSelectionModel().getSelectedIndex());
+        		     temp_nazwa_txt = temp_nazwa + ".txt";
+        		     System.out.println(temp_nazwa);
+        		     System.out.println(temp_nazwa_txt);
+         			 File f = new File(temp_nazwa);
+         			 System.out.println(f.getName());
+         			 sciezka_jako_nazwa_pliku = f.getName();
+         			 System.out.println(sciezka_jako_nazwa_pliku);
+
+         			 File fff = new File(temp_nazwa_txt);
+        			 if(fff.exists() && !fff.isDirectory())
+        			 {
+        				try
+        				{
+        					System.out.println(readFile(temp_nazwa_txt));
+        					metadane.setText(readFile(temp_nazwa_txt));
+                        }
+        				catch (IOException e33)
+        				{
+        					// TODO Auto-generated catch block
+                            e33.printStackTrace();
+                        }
+        			 }
+
+         			 // PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
+
         		}
         	});
         otworz0.setOnAction(
@@ -204,8 +242,10 @@ public class Main extends Application
 
                     File file2 = directoryChooser.showDialog(primaryStage);
                     System.out.println(file2);
+
                     try {
 						sciezka=file2.getCanonicalPath();
+						//System.out.println(sciezka);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -223,6 +263,7 @@ public class Main extends Application
             				try
             				{
             					System.out.println(f.getCanonicalPath());
+
             				}
             				catch(IOException e1)
             				{
@@ -247,6 +288,7 @@ public class Main extends Application
                     label.setText(list.getSelectionModel().getSelectedItem());
                     System.out.println((String)data.get(listView.getSelectionModel().getSelectedIndex()));
                     System.out.println(2);
+
 
                     }
                 }
@@ -342,17 +384,39 @@ public class Main extends Application
 
 
 	//....................................-------------------------------------------------------------------------
-    
+
+// PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
+
 	private static void zapiszPlik(String plik, String tekst){
-	        
-	        try (PrintWriter pw = new PrintWriter(plik)){ 
-	        	System.out.println("kepe");
+
+	        try (PrintWriter pw = new PrintWriter(plik)){
 	            pw.write(tekst);
-	        } catch (FileNotFoundException ex){ 
-	            System.out.println(ex); 
-	        }       
-	    } 
-	
+	        } catch (FileNotFoundException ex){
+	            System.out.println(ex);
+	        }
+	    }
+
+	public String readFile(String filePath) throws IOException {
+	    FileReader fileReader = new FileReader(filePath);
+	    BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+	    String textLine = bufferedReader.readLine();
+	    String zwrot=textLine;
+
+	    do
+	    {
+	      System.out.println(textLine);
+
+	      textLine = bufferedReader.readLine();
+	      zwrot=zwrot + textLine;
+	    } while(textLine != null);
+
+	    bufferedReader.close();
+	    System.out.println(zwrot);
+	    return zwrot;
+	  }
+
+// PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
 
     private void openNewImageWindow(File file, Stage primaryStage,Button openButton, ListView listView,
     		Button nowykatalog, Button usun, Button kopiuj, Button wytnij, Button otworz0, Button otworz1,
@@ -363,15 +427,14 @@ public class Main extends Application
         Image image = new Image(new FileInputStream((String) data.get(listView.getSelectionModel().getSelectedIndex())));
 		ImageView imageView = new ImageView(image);
 
-		//final String tags;
-		final String[] tags = {""};
+
+
 
 		//String source = "D:\\£ukasz\\Programowanie\\Eclipse\\Image2\\Katalogi\\katalog3\\5stp";
 
 		File fi = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
 
 		tags[0] = Metadane.pobierz_metadane(fi);
-		//System.out.println(tags);
 
 		TextArea metadane = new TextArea(tags[0]);
 		metadane.setLayoutX(10);
@@ -403,30 +466,32 @@ public class Main extends Application
         dodajtag.setLayoutX(10);
         dodajtag.setLayoutY(700);
 
-        
+
         dodajtag.setOnAction(
         		new EventHandler<ActionEvent>(){
         			@Override
-                    public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE PIOTREK
+                    public void handle(final ActionEvent e)  {
+        			// PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
+
         			String tags_nazwa;
         			String tags_tresc;
         			String tags_suma;
-        			
-        			
+        			String nazwa_pliku_txt;
 
         			tags_nazwa = textFieldtagnazwa.getText();
         			tags_tresc = textFieldtagtresc.getText();
-        			tags_suma = "Dodatkowy tag:" + tags_nazwa + " - " + tags_tresc + "\n";
+        			tags_suma = "Dodatkowy tag: " + tags_nazwa + " - " + tags_tresc + "\n";
         			tags[0] =  tags[0] + tags_suma;
-        			
-        			//System.out.println(tags[0]);
+        			nazwa_pliku_txt = sciezka_jako_nazwa_pliku + ".txt";
+
+        			zapiszPlik(nazwa_pliku_txt , tags[0]);
         			metadane.setText(tags[0]);
         			textFieldtagnazwa.setText("");
         			textFieldtagtresc.setText("");
-        			
-        			zapiszPlik("Metadane.txt" , tags[0]);
-        			
+
+        			// PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK PIOTREK
+
+
         		}
         		}
 
