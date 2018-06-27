@@ -3,6 +3,7 @@ import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;import java.io.OutputStream;import java.io.InputStream; //nowy input
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -63,6 +64,7 @@ public class Main extends Application
 	//....................................-------------------------------------------------------------------------
 
 	String sciezka = "D:\\Image\\"; // sztywna poczatkowa
+	String test="off";
 	@Override
     public void start(Stage primaryStage) throws IOException
 	{
@@ -111,15 +113,15 @@ public class Main extends Application
         final FileChooser fileChooser = new FileChooser();
         final DirectoryChooser directoryChooser = new DirectoryChooser();
 
-        final Button openButton = new Button("Wyœwietl Obraz");
+        final Button openButton = new Button("Wyï¿½wietl Obraz");
   		openButton.setLayoutX(230);
   		openButton.setLayoutY(236);
 
-        final Button nowykatalog = new Button("Utwórz katalog");
+        final Button nowykatalog = new Button("Utwï¿½rz katalog");
         nowykatalog.setLayoutX(230);
         nowykatalog.setLayoutY(200);
 
-        final Button usun = new Button("Usuñ");
+        final Button usun = new Button("Usuï¿½");
         usun.setLayoutX(230);
         usun.setLayoutY(164);
 
@@ -204,6 +206,7 @@ public class Main extends Application
                     System.out.println(file2);
                     try {
 						sciezka=file2.getCanonicalPath();
+						System.out.println(sciezka);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -243,8 +246,8 @@ public class Main extends Application
 
                     listView.setItems(datanames);
                     label.setText(list.getSelectionModel().getSelectedItem());
-                    System.out.println((String)data.get(listView.getSelectionModel().getSelectedIndex()));
-                    System.out.println(2);
+                    //System.out.println((String)data.get(listView.getSelectionModel().getSelectedIndex()));
+                    //System.out.println(2);
 
                     }
                 }
@@ -254,7 +257,14 @@ public class Main extends Application
         		new EventHandler<ActionEvent>(){
         			@Override
                     public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE KAMIL
+
+        				/*boolean success = (new File(sciezka+"XD")).mkdirs();
+        			    if (!success) {
+        			        System.out.append("\n Folder nie utworzony bo juï¿½ istnieje :\n");
+        			    }
+        			    else {
+        			        System.out.append("\n Folder utworzony\n");}*/
+        				//TODO edycja filechosera
         		}
         		}
 
@@ -264,7 +274,38 @@ public class Main extends Application
         		new EventHandler<ActionEvent>(){
         			@Override
                     public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE KAMIL
+        				try{
+                			File filele = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
+        			        if(filele.delete()){
+        			            System.out.println(filele.getName() + " zostal skasowany!");
+        			            sciezka = "D:\\Image\\"; // sztywna poczatkowa
+        			            File file = new File(sciezka);
+
+        			    		File[] files = file.listFiles();
+        			    		datanames.removeAll(datanames);
+        			            data.removeAll(data);
+        			            for (File f:files)
+        			            {
+        			                try {
+        			    				data.add(f.getCanonicalPath());
+        			    			} catch (IOException e1) {
+        			    				// TODO Auto-generated catch block
+        			    				e1.printStackTrace();
+        			    			}
+        			                datanames.add(f.getName());
+        			            }
+
+        			            listView.setItems(datanames);
+        			            //openNewImageWindow(primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
+        			        }else{
+        			            System.out.println("Operacja kasowania sie nie powiodla.");
+        			        }
+
+        			    }catch(Exception e2){
+
+        			        e2.printStackTrace();
+
+        			    }
         		}
         		}
 
@@ -274,7 +315,36 @@ public class Main extends Application
         		new EventHandler<ActionEvent>(){
         			@Override
                     public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE KAMIL
+        					InputStream inStream = null;
+                            OutputStream outStream = null;
+                            File afile = new File(sciezka);
+            				File file4 = fileChooser.showOpenDialog(primaryStage);
+                            System.out.println(file4);
+                            String sciezka13=null;
+                            File bfile=null;System.out.println(!file4.exists());
+                            if(!file4.exists()){
+                            	try{
+                            	file4.createNewFile();}
+                            	catch(IOException ea){ea.printStackTrace();}
+        					}
+                         try{
+                        	 sciezka13=file4.getCanonicalPath();
+     						bfile = new File(sciezka13);
+                             inStream = new FileInputStream(afile);
+                             outStream = new FileOutputStream(bfile);
+                             byte[] buffer = new byte[1024];
+                             //int length;
+                             //length=
+                             //copy the file content in bytes while ((length = inStream.read(buffer)) > 0){
+                              outStream.write(buffer);
+                             inStream.close();
+                             outStream.close();
+                             System.out.println("Plik zostal skopiowany!");
+                         }catch(IOException e3){
+                             e3.printStackTrace();
+                         }
+        			    //TODO eddycja filechoosera
+
         		}
         		}
 
@@ -285,6 +355,7 @@ public class Main extends Application
         			@Override
                     public void handle(final ActionEvent e) {
         			// YOUR CODE HERE KAMIL
+        			//TODO ctr+c, ctr+v kopiowanie + usuwanie
         		}
         		}
 
@@ -293,7 +364,25 @@ public class Main extends Application
         		new EventHandler<ActionEvent>(){
         			@Override
                     public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE KAMIL
+        				File file4 = fileChooser.showOpenDialog(primaryStage);
+                        System.out.println(file4);
+                        try {
+    						sciezka=file4.getCanonicalPath();
+    					} catch (IOException e1) {
+    						// TODO Auto-generated catch block
+    						e1.printStackTrace();
+    					}
+                       File file21 = new File(sciezka);
+                     try
+           			 {
+                    	 test="on";
+   						openNewImageWindow(file21,primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
+           			 }
+           			 catch(FileNotFoundException e1)
+           			 {
+   						e1.printStackTrace();
+           			 }
+
         		}
         		}
 
@@ -346,16 +435,31 @@ public class Main extends Application
     		Button nowykatalog, Button usun, Button kopiuj, Button wytnij, Button otworz0, Button otworz1,
     		HBox hb0, HBox hb1) throws FileNotFoundException
     {
+
+
         Stage secondStage = new Stage();
-        System.out.println(data.get(listView.getSelectionModel().getSelectedIndex()));
-        Image image = new Image(new FileInputStream((String) data.get(listView.getSelectionModel().getSelectedIndex())));
-		ImageView imageView = new ImageView(image);
 
-		String tags ="";
-
-		//String source = "D:\\£ukasz\\Programowanie\\Eclipse\\Image2\\Katalogi\\katalog3\\5stp";
-
-		File fi = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
+        //System.out.println(data.get(listView.getSelectionModel().getSelectedIndex()));
+        //System.out.println(listView.getSelectionModel().getSelectedIndex());
+        //System.out.println(2);
+        File fi=null;
+        String tags=null;
+        ImageView imageView=null;
+        Image image=null;
+        if(test=="on"){
+        //label.setText(list.getSelectionModel().getSelectedItem()); TODO co to robi?
+        image = new Image(new FileInputStream(file));
+		imageView = new ImageView(image);
+		tags ="";
+		fi =  file;
+		test="off";}
+        else{
+        	label.setText(list.getSelectionModel().getSelectedItem());
+            image = new Image(new FileInputStream((String) data.get(listView.getSelectionModel().getSelectedIndex())));
+    		imageView = new ImageView(image);
+    		tags ="";
+    		fi = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
+        }
 
 		tags = Metadane.pobierz_metadane(fi);
 
@@ -365,7 +469,7 @@ public class Main extends Application
 		metadane.setEditable(false);
 
 
-		Label tagnazwa = new Label("Podaj nazwe Tagu , który chcesz dodac do metadanych zdjecia:   ");
+		Label tagnazwa = new Label("Podaj nazwe Tagu , ktï¿½ry chcesz dodac do metadanych zdjecia:   ");
         tagnazwa.setTextFill(Color.WHITE);
         TextField textFieldtagnazwa = new TextField ();
         textFieldtagnazwa.setMinWidth(300);
@@ -375,7 +479,7 @@ public class Main extends Application
         vbtagnazwa.setLayoutX(10);
         vbtagnazwa.setLayoutY(500);
 
-		Label tagtresc = new Label("Podaj treœc Tagu , który chcesz dodac do metadanych zdjecia:   ");
+		Label tagtresc = new Label("Podaj treï¿½c Tagu , ktï¿½ry chcesz dodac do metadanych zdjecia:   ");
 		tagtresc.setTextFill(Color.WHITE);
         TextField textFieldtagtresc = new TextField ();
         textFieldtagtresc.setMinWidth(300);
