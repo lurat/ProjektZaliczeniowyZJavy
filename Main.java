@@ -3,7 +3,9 @@ import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;import java.io.OutputStream;import java.io.InputStream; //nowy input
+import java.io.FileOutputStream;import java.io.OutputStream;//KAMIL biblioteki
+import java.nio.file.Files;
+import java.io.InputStream;import javax.swing.JOptionPane;//KAMIL biblioteki
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -253,31 +255,46 @@ public class Main extends Application
             );
 
         nowykatalog.setOnAction(
-        		new EventHandler<ActionEvent>(){
+        		new EventHandler<ActionEvent>(){//KAMIL przycisk
         			@Override
                     public void handle(final ActionEvent e) {
-
-        				/*boolean success = (new File(sciezka+"XD")).mkdirs();
+        				String nazwa = JOptionPane.showInputDialog("Podaj nazwe katalogu");
+        				boolean success = (new File(sciezka+nazwa)).mkdirs();
         			    if (!success) {
         			        System.out.append("\n Folder nie utworzony bo ju¿ istnieje :\n");
         			    }
         			    else {
-        			        System.out.append("\n Folder utworzony\n");}*/
-        				//TODO edycja filechosera
+        			        System.out.append("\n Folder utworzony\n");
+        			        File file = new File(sciezka);
+
+    			    		File[] files = file.listFiles();
+    			    		datanames.removeAll(datanames);
+    			            data.removeAll(data);
+    			            for (File f:files)
+    			            {
+    			                try {
+    			    				data.add(f.getCanonicalPath());
+    			    			} catch (IOException e1) {
+    			    				// TODO Auto-generated catch block
+    			    				e1.printStackTrace();
+    			    			}
+    			                datanames.add(f.getName());
+    			            }
+
+    			            listView.setItems(datanames);}
         		}
         		}
 
         		);
 
         usun.setOnAction(
-        		new EventHandler<ActionEvent>(){
+        		new EventHandler<ActionEvent>(){//KAMIL przycisk
         			@Override
                     public void handle(final ActionEvent e) {
         				try{
                 			File filele = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
         			        if(filele.delete()){
         			            System.out.println(filele.getName() + " zostal skasowany!");
-        			            sciezka = "D:\\Image\\"; // sztywna poczatkowa
         			            File file = new File(sciezka);
 
         			    		File[] files = file.listFiles();
@@ -295,7 +312,6 @@ public class Main extends Application
         			            }
 
         			            listView.setItems(datanames);
-        			            //openNewImageWindow(primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
         			        }else{
         			            System.out.println("Operacja kasowania sie nie powiodla.");
         			        }
@@ -311,38 +327,37 @@ public class Main extends Application
         		);
 
         kopiuj.setOnAction(
-        		new EventHandler<ActionEvent>(){
+        		new EventHandler<ActionEvent>(){//KAMIL przycisk
         			@Override
                     public void handle(final ActionEvent e) {
         					InputStream inStream = null;
                             OutputStream outStream = null;
-                            File afile = new File(sciezka);
-            				File file4 = fileChooser.showOpenDialog(primaryStage);
-                            System.out.println(file4);
-                            String sciezka13=null;
-                            File bfile=null;System.out.println(!file4.exists());
-                            if(!file4.exists()){
+            				String sciezka13=null;
+                            File afile = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
+            				File file4 = directoryChooser.showDialog(primaryStage);
+            				sciezka13=file4.getPath();
+                            System.out.println(sciezka13);
+    			            System.out.println(sciezka13+afile.getName());
+    			            File bfile=new File(sciezka13+afile.getName());
+                            if(!bfile.exists()){
                             	try{
-                            	file4.createNewFile();}
+                            	bfile.createNewFile();}
                             	catch(IOException ea){ea.printStackTrace();}
         					}
                          try{
-                        	 sciezka13=file4.getCanonicalPath();
-     						bfile = new File(sciezka13);
                              inStream = new FileInputStream(afile);
                              outStream = new FileOutputStream(bfile);
-                             byte[] buffer = new byte[1024];
-                             //int length;
-                             //length=
-                             //copy the file content in bytes while ((length = inStream.read(buffer)) > 0){
-                              outStream.write(buffer);
+                             byte[] buffer = new byte[8192];
+                             int length;
+                             while ((length = inStream.read(buffer)) > 0){
+                                 outStream.write(buffer, 0, length);
+                             }
                              inStream.close();
                              outStream.close();
                              System.out.println("Plik zostal skopiowany!");
                          }catch(IOException e3){
                              e3.printStackTrace();
                          }
-        			    //TODO eddycja filechoosera
 
         		}
         		}
@@ -350,17 +365,71 @@ public class Main extends Application
         		);
 
         wytnij.setOnAction(
-        		new EventHandler<ActionEvent>(){
+        		new EventHandler<ActionEvent>(){//KAMIL przycisk
         			@Override
                     public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE KAMIL
-        			//TODO ctr+c, ctr+v kopiowanie + usuwanie
+        				InputStream inStream = null;
+                        OutputStream outStream = null;
+        				String sciezka13=null;
+                        File afile = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
+        				File file4 = directoryChooser.showDialog(primaryStage);
+        				sciezka13=file4.getPath();
+                        System.out.println(sciezka13);
+			            System.out.println(sciezka13+afile.getName());
+			            File bfile=new File(sciezka13+afile.getName());
+                        if(!bfile.exists()){
+                        	try{
+                        	bfile.createNewFile();}
+                        	catch(IOException ea){ea.printStackTrace();}
+    					}
+                     try{
+                         inStream = new FileInputStream(afile);
+                         outStream = new FileOutputStream(bfile);
+                         byte[] buffer = new byte[8192];
+                         int length;
+                         while ((length = inStream.read(buffer)) > 0){
+                             outStream.write(buffer, 0, length);
+                         }
+                         inStream.close();
+                         outStream.close();
+                         System.out.println("Plik zostal przeniesiony!");
+                     }catch(IOException e3){
+                         e3.printStackTrace();
+                     }
+                     try{
+     			        if(afile.delete()){
+     			            System.out.println(afile.getName() + " zostal skasowany!");
+     			            File file = new File(sciezka);
+     			    		File[] files = file.listFiles();
+     			    		datanames.removeAll(datanames);
+     			            data.removeAll(data);
+     			            for (File f:files)
+     			            {
+     			                try {
+     			    				data.add(f.getCanonicalPath());
+     			    			} catch (IOException e1) {
+     			    				// TODO Auto-generated catch block
+     			    				e1.printStackTrace();
+     			    			}
+     			                datanames.add(f.getName());
+     			            }
+
+     			            listView.setItems(datanames);
+     			        }else{
+     			            System.out.println("Operacja kasowania sie nie powiodla.");
+     			        }
+
+     			    }catch(Exception e2){
+
+     			        e2.printStackTrace();
+
+     			    }
         		}
         		}
 
         		);
         otworz1.setOnAction(
-        		new EventHandler<ActionEvent>(){
+        		new EventHandler<ActionEvent>(){//KAMIL przycisk
         			@Override
                     public void handle(final ActionEvent e) {
         				File file4 = fileChooser.showOpenDialog(primaryStage);
@@ -437,7 +506,7 @@ public class Main extends Application
 
 
         Stage secondStage = new Stage();
-
+      //KAMIL if
         //System.out.println(data.get(listView.getSelectionModel().getSelectedIndex()));
         //System.out.println(listView.getSelectionModel().getSelectedIndex());
         //System.out.println(2);
