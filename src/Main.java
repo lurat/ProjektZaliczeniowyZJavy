@@ -55,8 +55,8 @@ import com.drew.metadata.Tag;
 
 public class Main extends Application
 {
-	ListView<String> list = new ListView<String>();
-	final Label label = new Label();
+	static ListView<String> list = new ListView<String>();
+	final static Label label = new Label();
 	public static final ObservableList names = FXCollections.observableArrayList();
 	public static final ObservableList data = FXCollections.observableArrayList();
 	public static final ObservableList datanames = FXCollections.observableArrayList();
@@ -64,7 +64,7 @@ public class Main extends Application
 	//....................................-------------------------------------------------------------------------
 
 	String sciezka = "D:\\Image\\"; // sztywna poczatkowa
-	String test="off";
+	static String test="off";
 	@Override
     public void start(Stage primaryStage) throws IOException
 	{
@@ -166,232 +166,16 @@ public class Main extends Application
         hb1.setLayoutY(100);
 
 
-
       		Group root = new Group(listView, openButton, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1, label);
       		Scene scene = new Scene(root,1000,750,Color.DIMGREY);
 
-              //StackPane root = new StackPane();
-              //root.getChildren().addAll(openButton, listView);
-
-
-
-              //Scene scene = new Scene(root, 400, 150);
-
-
-        openButton.setOnAction(
-        	new EventHandler<ActionEvent>()
-        	{
-        		@Override
-        		public void handle(final ActionEvent e)
-        		{
-
-        			 try
-        			 {
-						openNewImageWindow(file,primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
-        			 }
-        			 catch(FileNotFoundException e1)
-        			 {
-						e1.printStackTrace();
-        			 }
-        		     textField1.setText((String)data.get(listView.getSelectionModel().getSelectedIndex()));
-
-        		}
-        	});
-        otworz0.setOnAction(
-          new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-
-                    File file2 = directoryChooser.showDialog(primaryStage);
-                    System.out.println(file2);
-                    try {
-						sciezka=file2.getCanonicalPath();
-						System.out.println(sciezka);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-                    File file21 = new File(sciezka);
-                    datanames.removeAll(datanames);
-                    data.removeAll(data);
-            		// check if the specified pathname is directory first
-            		if(file21.isDirectory())
-            		{
-            			//list all files on directory
-            			File[] files = file21.listFiles();
-            			for(File f:files)
-            			{
-            				try
-            				{
-            					System.out.println(f.getCanonicalPath());
-            				}
-            				catch(IOException e1)
-            				{
-            					e1.printStackTrace();
-            				}
-            			}
-            		}
-            		File[] files = file21.listFiles();
-                    for (File f:files)
-                    {
-                        try {
-							data.add(f.getCanonicalPath());
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-                        datanames.add(f.getName());
-                    }
-                    textField0.setText(sciezka);
-
-                    listView.setItems(datanames);
-                    label.setText(list.getSelectionModel().getSelectedItem());
-                    //System.out.println((String)data.get(listView.getSelectionModel().getSelectedIndex()));
-                    //System.out.println(2);
-
-                    }
-                }
-            );
-
-        nowykatalog.setOnAction(
-        		new EventHandler<ActionEvent>(){
-        			@Override
-                    public void handle(final ActionEvent e) {
-
-        				/*boolean success = (new File(sciezka+"XD")).mkdirs();
-        			    if (!success) {
-        			        System.out.append("\n Folder nie utworzony bo ju� istnieje :\n");
-        			    }
-        			    else {
-        			        System.out.append("\n Folder utworzony\n");}*/
-        				//TODO edycja filechosera
-        		}
-        		}
-
-        		);
-
-        usun.setOnAction(
-        		new EventHandler<ActionEvent>(){
-        			@Override
-                    public void handle(final ActionEvent e) {
-        				try{
-                			File filele = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
-        			        if(filele.delete()){
-        			            System.out.println(filele.getName() + " zostal skasowany!");
-        			            sciezka = "D:\\Image\\"; // sztywna poczatkowa
-        			            File file = new File(sciezka);
-
-        			    		File[] files = file.listFiles();
-        			    		datanames.removeAll(datanames);
-        			            data.removeAll(data);
-        			            for (File f:files)
-        			            {
-        			                try {
-        			    				data.add(f.getCanonicalPath());
-        			    			} catch (IOException e1) {
-        			    				// TODO Auto-generated catch block
-        			    				e1.printStackTrace();
-        			    			}
-        			                datanames.add(f.getName());
-        			            }
-
-        			            listView.setItems(datanames);
-        			            //openNewImageWindow(primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
-        			        }else{
-        			            System.out.println("Operacja kasowania sie nie powiodla.");
-        			        }
-
-        			    }catch(Exception e2){
-
-        			        e2.printStackTrace();
-
-        			    }
-        		}
-        		}
-
-        		);
-
-        kopiuj.setOnAction(
-        		new EventHandler<ActionEvent>(){
-        			@Override
-                    public void handle(final ActionEvent e) {
-        					InputStream inStream = null;
-                            OutputStream outStream = null;
-                            File afile = new File(sciezka);
-            				File file4 = fileChooser.showOpenDialog(primaryStage);
-                            System.out.println(file4);
-                            String sciezka13=null;
-                            File bfile=null;System.out.println(!file4.exists());
-                            if(!file4.exists()){
-                            	try{
-                            	file4.createNewFile();}
-                            	catch(IOException ea){ea.printStackTrace();}
-        					}
-                         try{
-                        	 sciezka13=file4.getCanonicalPath();
-     						bfile = new File(sciezka13);
-                             inStream = new FileInputStream(afile);
-                             outStream = new FileOutputStream(bfile);
-                             byte[] buffer = new byte[1024];
-                             //int length;
-                             //length=
-                             //copy the file content in bytes while ((length = inStream.read(buffer)) > 0){
-                              outStream.write(buffer);
-                             inStream.close();
-                             outStream.close();
-                             System.out.println("Plik zostal skopiowany!");
-                         }catch(IOException e3){
-                             e3.printStackTrace();
-                         }
-        			    //TODO eddycja filechoosera
-
-        		}
-        		}
-
-        		);
-
-        wytnij.setOnAction(
-        		new EventHandler<ActionEvent>(){
-        			@Override
-                    public void handle(final ActionEvent e) {
-        			// YOUR CODE HERE KAMIL
-        			//TODO ctr+c, ctr+v kopiowanie + usuwanie
-        		}
-        		}
-
-        		);
-        otworz1.setOnAction(
-        		new EventHandler<ActionEvent>(){
-        			@Override
-                    public void handle(final ActionEvent e) {
-        				File file4 = fileChooser.showOpenDialog(primaryStage);
-                        System.out.println(file4);
-                        try {
-    						sciezka=file4.getCanonicalPath();
-    					} catch (IOException e1) {
-    						// TODO Auto-generated catch block
-    						e1.printStackTrace();
-    					}
-                       File file21 = new File(sciezka);
-                     try
-           			 {
-                    	 test="on";
-   						openNewImageWindow(file21,primaryStage,openButton,listView, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1);
-           			 }
-           			 catch(FileNotFoundException e1)
-           			 {
-   						e1.printStackTrace();
-           			 }
-
-        		}
-        		}
-
-        		);
-
-
-
-
-
+      		funkcjonalnosc_przyciskow a= new funkcjonalnosc_przyciskow();
+      		sciezka=a.setButtons( openButton,  otworz0, nowykatalog, usun, kopiuj, wytnij,  otworz1,
+				 primaryStage,  listView,  file, hb0,  hb1
+				, textField0, textField1, data,  fileChooser,
+				 directoryChooser,  sciezka
+				, datanames,  label, list);
+      		
 
         primaryStage.setTitle("JavaImageDisplayer");
         primaryStage.setScene(scene);
@@ -431,17 +215,15 @@ public class Main extends Application
 	//....................................-------------------------------------------------------------------------
 
 
-    private void openNewImageWindow(File file, Stage primaryStage,Button openButton, ListView listView,
+    public static void openNewImageWindow(File file, Stage primaryStage,Button openButton, ListView listView,
     		Button nowykatalog, Button usun, Button kopiuj, Button wytnij, Button otworz0, Button otworz1,
     		HBox hb0, HBox hb1) throws FileNotFoundException
     {
 
 
-        Stage secondStage = new Stage();
 
-        //System.out.println(data.get(listView.getSelectionModel().getSelectedIndex()));
-        //System.out.println(listView.getSelectionModel().getSelectedIndex());
-        //System.out.println(2);
+
+
         File fi=null;
         String tags=null;
         ImageView imageView=null;
