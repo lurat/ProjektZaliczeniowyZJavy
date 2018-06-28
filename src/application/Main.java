@@ -367,9 +367,9 @@ public class Main extends Application
                             File afile = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
             				File file4 = directoryChooser.showDialog(primaryStage);
             				sciezka13=file4.getPath();
-                            System.out.println(sciezka13);
-    			            System.out.println(sciezka13+afile.getName());
-    			            File bfile=new File(sciezka13+afile.getName());
+                            //System.out.println(afile.getName());
+    			            //System.out.println(sciezka13+'\\'+afile.getName());
+    			            File bfile=new File(sciezka13+'\\'+afile.getName());
                             if(!bfile.exists()){
                             	try{
                             	bfile.createNewFile();}
@@ -405,9 +405,9 @@ public class Main extends Application
                         File afile = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
         				File file4 = directoryChooser.showDialog(primaryStage);
         				sciezka13=file4.getPath();
-                        System.out.println(sciezka13);
-			            System.out.println(sciezka13+afile.getName());
-			            File bfile=new File(sciezka13+afile.getName());
+                        //System.out.println(sciezka13);
+			            //System.out.println(sciezka13+afile.getName());
+			            File bfile=new File(sciezka13+'\\'+afile.getName());
                         if(!bfile.exists()){
                         	try{
                         	bfile.createNewFile();}
@@ -429,7 +429,7 @@ public class Main extends Application
                      }
                      try{
      			        if(afile.delete()){
-     			            System.out.println(afile.getName() + " zostal skasowany!");
+     			            //System.out.println(afile.getName() + " zostal skasowany!");
      			            File file = new File(sciezka);
      			    		File[] files = file.listFiles();
      			    		datanames.removeAll(datanames);
@@ -595,7 +595,7 @@ public String readFile(String filePath) throws IOException {
 		metadane.setEditable(false);
 
 
-		Label tagnazwa = new Label("Podaj nazwe Tagu , kt�ry chcesz dodac do metadanych zdjecia:   ");
+		Label tagnazwa = new Label("Podaj nazwe Tagu , ktory chcesz dodac do metadanych zdjecia:   ");
         tagnazwa.setTextFill(Color.WHITE);
         TextField textFieldtagnazwa = new TextField ();
         textFieldtagnazwa.setMinWidth(300);
@@ -605,7 +605,7 @@ public String readFile(String filePath) throws IOException {
         vbtagnazwa.setLayoutX(10);
         vbtagnazwa.setLayoutY(500);
 
-		Label tagtresc = new Label("Podaj tre�c Tagu , kt�ry chcesz dodac do metadanych zdjecia:   ");
+		Label tagtresc = new Label("Podaj tresc Tagu , ktory chcesz dodac do metadanych zdjecia:   ");
 		tagtresc.setTextFill(Color.WHITE);
         TextField textFieldtagtresc = new TextField ();
         textFieldtagtresc.setMinWidth(300);
@@ -664,11 +664,11 @@ public String readFile(String filePath) throws IOException {
         imageView.setImage(image);
         imageView.setSmooth(true);
         imageView.setCache(true);
-        imageView.setLayoutX(550);
+        imageView.setLayoutX(666);
         imageView.setLayoutY(300);
 
         Group root = new Group(imageView,listView,openButton,label, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1, metadane, vbtagnazwa, vbtagtresc, dodajtag);
-  		Scene scene = new Scene(root,1000,750,Color.DIMGREY);
+  		Scene scene = new Scene(root,1600,750,Color.DIMGREY);
         //((VBox)scene.getRoot()).getChildren().addAll(menuBar, vbox);
 
         //primaryStage.setTitle(file.getName());
