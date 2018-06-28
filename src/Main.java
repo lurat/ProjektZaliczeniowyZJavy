@@ -63,8 +63,10 @@ public class Main extends Application
 
 	//....................................-------------------------------------------------------------------------
 
+
 	String sciezka = "D:\\Image\\"; // sztywna poczatkowa
 	static String test="off";
+
 	@Override
     public void start(Stage primaryStage) throws IOException
 	{
@@ -113,15 +115,16 @@ public class Main extends Application
         final FileChooser fileChooser = new FileChooser();
         final DirectoryChooser directoryChooser = new DirectoryChooser();
 
-        final Button openButton = new Button("Wy�wietl Obraz");
+
+        final Button openButton = new Button("Wyï¿½wietl Obraz");
   		openButton.setLayoutX(230);
   		openButton.setLayoutY(236);
 
-        final Button nowykatalog = new Button("Utw�rz katalog");
+        final Button nowykatalog = new Button("Utwï¿½rz katalog");
         nowykatalog.setLayoutX(230);
         nowykatalog.setLayoutY(200);
 
-        final Button usun = new Button("Usu�");
+        final Button usun = new Button("Usuï¿½");
         usun.setLayoutX(230);
         usun.setLayoutY(164);
 
@@ -138,8 +141,10 @@ public class Main extends Application
         otworz0.setLayoutY(50);
 
         final Button otworz1 = new Button("Wczytaj nowe zdjecie!");
+
         otworz1.setLayoutX(840);
         otworz1.setLayoutY(200);
+
 
 
         Label path0 = new Label("Sciezka do katalogu:");
@@ -164,6 +169,7 @@ public class Main extends Application
         hb1.setSpacing(10);
         hb1.setLayoutX(400);
         hb1.setLayoutY(100);
+
 
 
       		Group root = new Group(listView, openButton, nowykatalog, usun, kopiuj, wytnij, otworz0, otworz1, hb0, hb1, label);
@@ -215,6 +221,7 @@ public class Main extends Application
 	//....................................-------------------------------------------------------------------------
 
 
+
     public static void openNewImageWindow(File file, Stage primaryStage,Button openButton, ListView listView,
     		Button nowykatalog, Button usun, Button kopiuj, Button wytnij, Button otworz0, Button otworz1,
     		HBox hb0, HBox hb1) throws FileNotFoundException
@@ -243,6 +250,7 @@ public class Main extends Application
     		fi = new File((String) data.get(listView.getSelectionModel().getSelectedIndex()));
         }
 
+
 		tags = Metadane.pobierz_metadane(fi);
 
 		TextArea metadane = new TextArea(tags);
@@ -251,7 +259,9 @@ public class Main extends Application
 		metadane.setEditable(false);
 
 
-		Label tagnazwa = new Label("Podaj nazwe Tagu , kt�ry chcesz dodac do metadanych zdjecia:   ");
+
+		Label tagnazwa = new Label("Podaj nazwe Tagu , ktï¿½ry chcesz dodac do metadanych zdjecia:   ");
+
         tagnazwa.setTextFill(Color.WHITE);
         TextField textFieldtagnazwa = new TextField ();
         textFieldtagnazwa.setMinWidth(300);
@@ -261,7 +271,9 @@ public class Main extends Application
         vbtagnazwa.setLayoutX(10);
         vbtagnazwa.setLayoutY(500);
 
-		Label tagtresc = new Label("Podaj tre�c Tagu , kt�ry chcesz dodac do metadanych zdjecia:   ");
+
+		Label tagtresc = new Label("Podaj treï¿½c Tagu , ktï¿½ry chcesz dodac do metadanych zdjecia:   ");
+
 		tagtresc.setTextFill(Color.WHITE);
         TextField textFieldtagtresc = new TextField ();
         textFieldtagtresc.setMinWidth(300);
